@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+  <meta charset="utf-8">
   <title>PyMIvn Daily dashboard</title>
   <script src="https://unpkg.com/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -18,12 +19,14 @@
 </head>
 <body>
   <div id="app" class="container">
-    <h2>Your IP: {{ ip }} </h2>
+    <h2>Your IP: {{ ip }} - Your ISP: {{ ipinfo.org }}</h2>
+    <!-- TODO how to add target=_blank here? -->
+    <h2><a v-bind:href=loc> Location: {{ ipinfo.city }} </a> </h2>
     <h2>${{ usd_per_btc }} per BTC</h2>
     <div v-for="job in jobs">
-    	<h3>{{ job.created_at.slice(0,10) }} <a v-bind:href=job.html_url> {{ job.title }} </a> </h3>
-    	<div class="row">
-    	<div v-for="label in job.labels"> <button class="button button-clear">{{label.name}} </button></div>
+        <h3>{{ job.created_at.slice(0,10) }} <a v-bind:href=job.html_url> {{ job.title }} </a> </h3>
+        <div class="row">
+        <div v-for="label in job.labels"> <button class="button button-clear">{{label.name}} </button></div>
     </div>
     </div>
   </div>
@@ -32,17 +35,26 @@
     var app = new Vue({
       el: '#app',
       data () {
-      	return {
+        return {
         jobs: null,
+        ipinfo: null,
         usd_per_btc: null,
         ip: null
       }},
+      computed:  {
+
+            loc: function () {
+                return "https://www.openstreetmap.org/#map=19/" + this.ipinfo.loc
+            }
+
+      },
       mounted () {
-      	axios.get("https://httpbin.org/ip").then(resp => { this.ip = resp.data.origin });
-      	axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').then(response => (this.usd_per_btc = response.data.bpi.USD.rate));
-      	axios.get('https://api.github.com/repos/awesome-jobs/vietnam/issues').then(response => (this.jobs = response.data));
+        axios.get("https://httpbin.org/ip").then(resp => { this.ip = resp.data.origin });
+        axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').then(response => (this.usd_per_btc = response.data.bpi.USD.rate));
+        axios.get('https://api.github.com/repos/awesome-jobs/vietnam/issues').then(response => (this.jobs = response.data));
+        axios.get("https://ipinfo.io/").then(resp => { this.ipinfo = resp.data });
       }
-	})
+    })
   </script>
 </body>
 </html>
