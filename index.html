@@ -38,6 +38,7 @@
     </div>
     </div>
   </section>
+  </main>
 
   <script>
     var app = new Vue({
@@ -51,11 +52,6 @@
         ip: null
       }},
       computed:  {
-
-            loc: function () {
-                return "https://www.openstreetmap.org/#map=19/" + this.ipinfo.loc
-            }
-
       },
       mounted () {
         axios.get("https://httpbin.org/ip").then(resp => { this.ip = resp.data.origin });
@@ -65,6 +61,5 @@
       }
     })
   </script>
-</main>
 </body>
 </html>
