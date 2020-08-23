@@ -18,18 +18,26 @@
   <!-- You should properly set the path from the main file. -->
 </head>
 <body>
-  <div id="app" class="container">
-    <h2>Your IP: {{ ip }} - Your ISP: {{ ipinfo.org }}</h2>
-    <!-- TODO how to add target=_blank here? -->
-    <h2><a v-bind:href=loc> Location: {{ ipinfo.city }} </a> </h2>
-    <h2>${{ usd_per_btc }} per BTC</h2>
+  <main class="wrapper" id="app">
+    <header class="container">
+    <h1>PyMI.vn news board</h1>
+    </header>
+
+  <section id="daily" class="container">
+    <h4>Your IP: {{ ip }} - Your ISP: {{ ipinfo.org }}</h4>
+    <h4><a target="_blank" v-bind:href="'https://www.openstreetmap.org/#map=19/' + this.ipinfo.loc"> Location: {{ ipinfo.city }} </a> </h4>
+    <h4>Today: {{ today }}</h4>
+    <h4>${{ usd_per_btc }} per BTC</h4>
+  </section>
+
+  <section id="awesomejobs" class="container">
     <div v-for="job in jobs">
         <h3>{{ job.created_at.slice(0,10) }} <a v-bind:href=job.html_url> {{ job.title }} </a> </h3>
         <div class="row">
         <div v-for="label in job.labels"> <button class="button button-clear">{{label.name}} </button></div>
     </div>
     </div>
-  </div>
+  </section>
 
   <script>
     var app = new Vue({
@@ -37,6 +45,7 @@
       data () {
         return {
         jobs: null,
+        today: new Date().toDateString(),
         ipinfo: null,
         usd_per_btc: null,
         ip: null
@@ -56,5 +65,6 @@
       }
     })
   </script>
+</main>
 </body>
 </html>
