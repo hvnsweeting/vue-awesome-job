@@ -31,16 +31,22 @@
   </section>
 
   <section id="awesomejobs" class="container">
-    <div v-for="job in jobs">
-        <h3>{{ job.created_at.slice(0,10) }} <a v-bind:href=job.html_url> {{ job.title }} </a> </h3>
-        <div class="row">
-        <div v-for="label in job.labels"> <button class="button button-clear">{{label.name}} </button></div>
-    </div>
-    </div>
+    <job v-for="(job, idx) in jobs" v-bind:key="idx" v-bind:job="job">
+    </job>
   </section>
   </main>
 
   <script>
+    Vue.component('job', {
+        props: ['job'],
+        template: `<div>
+        <h3>{{ job.created_at.slice(0,10) }} <a v-bind:href=job.html_url> {{ job.title }} </a> </h3>
+        <div class="row">
+        <div v-for="label in job.labels"> <button class="button button-clear">{{label.name}} </button></div>
+        </div>
+        </div>
+        `
+    });
     var app = new Vue({
       el: '#app',
       data () {
